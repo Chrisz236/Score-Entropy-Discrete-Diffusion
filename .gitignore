@@ -20,3 +20,4 @@ core
 **.log
 *.jsonl
 models/
+!sedd/models/
