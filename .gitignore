@@ -21,3 +21,5 @@ core
 *.jsonl
 models/
 !sedd/models/
+.aim
+*.parquet
