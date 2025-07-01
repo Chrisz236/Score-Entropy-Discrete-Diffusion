@@ -10,32 +10,40 @@ This repo is based on the [Score Entropy Discrete Diffusion](https://github.com/
 
 It has been modified to perform character level diffusion for a few practical reasons.
 
-1) Be able to run on a single A10 GPU
+1) Be able to run on H100 with CUDA 11.8
 2) See how well a character level language diffusion model performs.
 
 
 ## Installation
 
-Simply run
-
+Get the repo
+```bash
+git clone https://github.com/Chrisz236/Score-Entropy-Discrete-Diffusion.git
+cd Score-Entropy-Discrete-Diffusion
 ```
-python -m venv ~/.venv_sedd
-source ~/.venv_sedd/bin/activate
+
+Create virtual env with conda and install dependencies with pip
+
+```bash
+conda env create -f environment.yaml
+conda activate oxen
 pip install -r requirements.txt
 ```
 
-This will create a virtual environmet ```~/.venv_sedd``` environment with packages installed. 
-
-Note that this installs with CUDA 11.8, and different CUDA versions must be installed manually. The biggest factor is making sure that the ```torch``` and ```flash-attn``` packages use the same CUDA version (more found [here](https://github.com/Dao-AILab/flash-attention)).
 
 ## Working with Pretrained Models
 
 ### Download Models
 
+You will need setup an free API key from `https://www.oxen.ai/`, export it to environment variable:
+```bash
+export OXEN_API_KEY="YOUR_API_KEY_HERE"
+```
+
 I uploaded the raw PyTorch `SEDD-large` model to Oxen.ai for convenience. To download you can simply run:
 
-```
-oxen clone https://hub.oxen.ai/models/SEDD-large
+```bash
+python scripts/pull_model.py
 ```
 
 This repository contains both the model weights `checkpoint.pth` and the `config.yaml` file with other necessary parameters.
@@ -45,14 +53,14 @@ This repository contains both the model weights `checkpoint.pth` and the `config
 
 We can run sampling using a command 
 
-```
-python scripts/run_sample.py --model /path/to/SEDD-large --steps 128
+```bash
+python -m scripts.run_sample --model models/SEDD-large/ --steps 128
 ```
 
 We can also sample conditionally using
 
-```
-python scripts/run_sample_cond.py --model_path MODEL_PATH --step STEPS --prefix PREFIX --suffix SUFFIX
+```bash
+python -m scripts.run_sample_cond.py --model_path MODEL_PATH --step STEPS --prefix PREFIX --suffix SUFFIX
 ```
 
 ## Training New Models
@@ -61,8 +69,8 @@ python scripts/run_sample_cond.py --model_path MODEL_PATH --step STEPS --prefix 
 
 We provide training code, which can be run with the command
 
-```
-python scripts/run_train.py --repo oxen_username/repo_name
+```bash
+python -m scripts.run_train.py --repo oxen_username/repo_name
 ```
 
 ## Acknowledgements
